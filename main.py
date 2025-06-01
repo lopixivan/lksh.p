@@ -55,7 +55,8 @@ def get_id_player():
         r = requests.get(url + str(i), headers=h)
 
         if r.status_code == 429:
-            time.sleep(60 - (time.time() - start_time))
+            
+            time.sleep((60 - (time.time() - start_time))%60)
             start_time = time.time()
             r = requests.get(url + str(i), headers=h)
 
