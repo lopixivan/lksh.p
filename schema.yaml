@@ -1,1 +1,140 @@
+openapi: 3.0.3
+info:
+  title: Sports Statistics API
+  version: 1.0.0
+  description: API для получения статистики по командам и игрокам
 
+paths:
+  /stats?team_name=<name>:
+    get:
+      summary: Получить статистику команды по её названию
+      parameters:
+        - name: team_name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Название команды
+      responses:
+        '200':
+          description: Статистика команды
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  wins:
+                    type: integer
+                    description: Количество побед
+                  losses:
+                    type: integer
+                    description: Количество поражений
+                  goal_difference:
+                    type: integer
+                    description: Разница забитых и пропущенных голов
+                example:
+                  wins: 5
+                  losses: 3
+                  goal_difference: 7
+        '404':
+          description: Команда не найдена
+
+  /versus?player1_id=<id>&player2_id=<id>:
+    get:
+      summary: Получить количество матчей между двумя игроками по их id
+      parameters:
+        - name: player1_id
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: ID первого игрока
+        - name: player2_id
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: ID второго игрока
+      responses:
+        '200':
+          description: Количество матчей
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matches:
+                    type: integer
+                    description: Количество матчей, где игроки встречались
+                example:
+                  matches: 12
+        '400':
+          description: Некорректные параметры запроса
+
+  /goals:
+    get:
+      summary: Получить список голов игрока
+      parameters:
+        - name: player_id
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: ID игрока
+      responses:
+        '200':
+          description: Список голов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    match:
+                      type: integer
+                      description: ID матча
+                    time:
+                      type: integer
+                      description: Минута гола
+                example:
+                  - match: 123
+                    time: 45
+                  - match: 145
+                    time: 78
+        '400':
+          description: Некорректный ID игрока
+
+  /front/stats:
+    get:
+      summary: HTML таблица со статистикой команд
+      responses:
+        '200':
+          description: HTML страница
+          content:
+            text/html:
+              schema:
+                type: string
+          examples:
+            html: |
+              <!DOCTYPE html>
+              <html>
+              ...
+              </html>
+
+  /front/versus:
+    get:
+      summary: HTML формочка для ввода двух id игроков и получения их статистики 
+      responses:
+        '200':
+          description: HTML страница
+          content:
+            text/html:
+              schema:
+                type: string
+          examples:
+            html: |
+              <!DOCTYPE html>
+              <html>
+              ...
+              </html>
