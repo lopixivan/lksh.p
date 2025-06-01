@@ -71,9 +71,9 @@ paths:
         '400':
           description: Некорректные параметры запроса
 
-  /goals:
+  /goals?player_id=<id>:
     get:
-      summary: Получить список голов игрока
+      summary: Получить список голов игрока по его id
       parameters:
         - name: player_id
           in: query
